@@ -5,14 +5,11 @@ defmodule Nimiqex.Network do
   import Nimiqex, only: [rpc: 2]
 
   rpc :get_peer_id,
-    method: "getPeerId",
     description: "get peer id"
 
   rpc :get_peer_count,
-    method: "getPeerCount",
     description: "get peer count"
 
   rpc :get_peer_list,
-    method: "getPeerList",
     description: "get peer list"
 end

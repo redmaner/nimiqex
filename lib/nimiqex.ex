@@ -97,7 +97,13 @@ defmodule Nimiqex do
       ]
       |> Keyword.merge(opts)
 
-    method = Keyword.get(opts, :method) |> check_method()
+    method =
+      func_name
+      |> to_string()
+      |> String.split("_")
+      |> Enum.reduce({0, ""}, &func_to_method/2)
+      |> unwrap_method()
+
     params = Keyword.get(opts, :params) |> check_params()
     description = Keyword.get(opts, :description) |> check_description()
 
@@ -121,9 +127,10 @@ defmodule Nimiqex do
     throw("RPC spec not met: #{func_name} must be an atom, #{opts} must be a keyword list")
   end
 
-  defp check_method(""), do: throw("RPC failed spec: Method is undefined")
-  defp check_method(method) when is_binary(method), do: method
-  defp check_method(_method), do: throw("RPC failed spec: Method must be binary")
+  defp func_to_method(part, {0, _method}), do: {1, part}
+  defp func_to_method(part, {index, method}), do: {index, method <> String.capitalize(part)}
+
+  defp unwrap_method({_index, method}), do: method
 
   defp check_params(params) when is_list(params), do: params
   defp check_params(_params), do: throw("RPC failed spec: Params must be a list")

@@ -5,6 +5,5 @@ defmodule Nimiqex.Mempool do
   import Nimiqex, only: [rpc: 2]
 
   rpc :mempool,
-    method: "mempool",
     description: "retrieve mempool information"
 end
