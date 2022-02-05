@@ -142,7 +142,8 @@ defmodule Nimiqex do
       [
         method: "",
         description: "",
-        params: []
+        params: [],
+        spec: []
       ]
       |> Keyword.merge(opts)
 
@@ -155,11 +156,14 @@ defmodule Nimiqex do
 
     params = Keyword.get(opts, :params) |> check_params()
     description = Keyword.get(opts, :description) |> check_description()
+    spec = Keyword.get(opts, :spec)
 
     quote do
       @doc """
       `#{unquote(to_string(func_name))}` #{unquote(description)}
       """
+      @spec unquote(func_name)(unquote_splicing(spec)) ::
+              Jsonrpc.Request.t() | [Jsonrpc.Request.t()]
       def unquote(func_name)(unquote_splicing(params)) do
         Jsonrpc.Request.new(method: unquote(method), params: [unquote_splicing(params)])
       end
