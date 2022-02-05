@@ -147,16 +147,10 @@ defmodule Nimiqex do
       ]
       |> Keyword.merge(opts)
 
-    method =
-      func_name
-      |> to_string()
-      |> String.split("_")
-      |> Enum.reduce({0, ""}, &func_to_method/2)
-      |> unwrap_method()
-
-    params = Keyword.get(opts, :params) |> check_params()
+    method = func_name |> to_string() |> Inflex.camelize(:lower)
+    params = Keyword.get(opts, :params) |> check_is_list()
     description = Keyword.get(opts, :description) |> check_description()
-    spec = Keyword.get(opts, :spec)
+    spec = Keyword.get(opts, :spec) |> check_is_list()
 
     quote do
       @doc """
@@ -180,13 +174,8 @@ defmodule Nimiqex do
     throw("RPC spec not met: #{func_name} must be an atom, #{opts} must be a keyword list")
   end
 
-  defp func_to_method(part, {0, _method}), do: {1, part}
-  defp func_to_method(part, {index, method}), do: {index, method <> String.capitalize(part)}
-
-  defp unwrap_method({_index, method}), do: method
-
-  defp check_params(params) when is_list(params), do: params
-  defp check_params(_params), do: throw("RPC failed spec: Params must be a list")
+  defp check_is_list(params) when is_list(params), do: params
+  defp check_is_list(_params), do: throw("RPC failed spec: params and spec must be a list")
 
   defp check_description(""), do: throw("RPC failed spec: Description is undefined")
   defp check_description(description) when is_binary(description), do: description
