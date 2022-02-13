@@ -50,12 +50,12 @@ defmodule Nimiqex.Consensus do
   rpc :create_update_transaction,
     description: "create update transaction to update the validator of the staker wallet",
     params: [sender_wallet, staker_wallet, new_delegation, fee, validity_start_height],
-    spec: [binary(), binary(), binary(), integer(), binary()]
+    spec: [binary() | nil, binary(), binary(), integer(), binary()]
 
   rpc :send_update_transaction,
     description: "send update transaction to update the validator of the staker wallet",
     params: [sender_wallet, staker_wallet, new_delegation, fee, validity_start_height],
-    spec: [binary(), binary(), binary(), integer(), binary()]
+    spec: [binary() | nil, binary(), binary(), integer(), binary()]
 
   rpc :create_unstake_transaction,
     description:

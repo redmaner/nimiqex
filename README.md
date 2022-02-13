@@ -10,7 +10,7 @@ by adding `nimiqex` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:nimiqex, "~> 0.1.0"}
+    {:nimiqex, "~> 0.3.0"}
   ]
 end
 ```

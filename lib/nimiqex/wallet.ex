@@ -10,7 +10,7 @@ defmodule Nimiqex.Wallet do
   rpc :import_raw_key,
     description: "imports an account to the node using its raw key",
     params: [key_data, passphrase],
-    spec: [binary(), binary()]
+    spec: [binary(), binary() | nil]
 
   rpc :is_account_imported,
     description: "returns whether the given account is imported at the node",
@@ -20,7 +20,7 @@ defmodule Nimiqex.Wallet do
   rpc :unlock_account,
     description: "unlocks an account for sending transactions",
     params: [address, passphrase, duration],
-    spec: [binary(), binary(), integer()]
+    spec: [binary(), binary() | nil, integer() | nil]
 
   rpc :is_account_unlocked,
     description: "returns whether the given account is unlocked on the node",
