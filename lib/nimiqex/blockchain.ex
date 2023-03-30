@@ -71,9 +71,14 @@ defmodule Nimiqex.Blockchain do
 
   rpc :get_validator_by_address,
     description:
-      "retrieves validator by addres. If include_stakers is true, the delegated stakers for the given validator are returned as well",
-    params: [address, include_stakers],
-    spec: [binary(), boolean()]
+      "retrieves validator by addres.",
+    params: [address],
+    spec: [binary()]
+
+  rpc :get_stakers_by_validator_address,
+    description: "retrieves stakers for given validators. WARNINNG: this is a CPU intensive operation",
+    params: [address],
+    spec: [binary()]
 
   rpc :get_staker_by_address,
     description: "retrieves staker for the given addres",

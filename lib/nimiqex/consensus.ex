@@ -68,4 +68,32 @@ defmodule Nimiqex.Consensus do
       "send unstake transaction to remove an amount of the active stake of the staker wallet",
     params: [sender_wallet, staker_wallet, value, fee, validity_start_height],
     spec: [binary(), binary(), integer(), integer(), binary()]
+
+  rpc :create_new_validator_transaction,
+    description: "send new validator transation to start a new validator",
+    params: [
+      sender_wallet,
+      validator_wallet,
+      signing_key,
+      voting_key,
+      reward_address,
+      signal_data,
+      fee,
+      validity_start_height
+    ],
+    spec: [binary(), binary(), binary(), binary(), binary(), binary(), integer(), binary()]
+
+  rpc :send_new_validator_transaction,
+    description: "send new validator transation to start a new validator",
+    params: [
+      sender_wallet,
+      validator_wallet,
+      signing_key,
+      voting_key,
+      reward_address,
+      signal_data,
+      fee,
+      validity_start_height
+    ],
+    spec: [binary(), binary(), binary(), binary(), binary(), binary(), integer(), binary()]
 end
