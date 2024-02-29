@@ -36,6 +36,11 @@ defmodule Nimiqex.Blockchain do
     params: [block_number, view_number],
     spec: [integer(), integer()]
 
+  rpc :get_transaction_by_hash,
+    description: "get transaction by hash",
+    params: [hash],
+    spec: [binary()]
+
   rpc :get_transactions_by_block_number,
     description: "retrieves extended transactions for given block",
     params: [block_number],
@@ -70,13 +75,13 @@ defmodule Nimiqex.Blockchain do
     description: "retrieves list of active validators"
 
   rpc :get_validator_by_address,
-    description:
-      "retrieves validator by addres.",
+    description: "retrieves validator by addres.",
     params: [address],
     spec: [binary()]
 
   rpc :get_stakers_by_validator_address,
-    description: "retrieves stakers for given validators. WARNINNG: this is a CPU intensive operation",
+    description:
+      "retrieves stakers for given validators. WARNINNG: this is a CPU intensive operation",
     params: [address],
     spec: [binary()]
 

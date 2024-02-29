@@ -1,16 +1,13 @@
 # Nimiqex
 
-**TODO: Add description**
+A native Elixir implementation of the Nimiq albatross RPC interface
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `nimiqex` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:nimiqex, "~> 0.3.0"}
+    {:nimiqex, git: "git@github.com:redmaner/nimiqex.git", tag: "0.5.0"}
   ]
 end
 ```

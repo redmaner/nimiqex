@@ -96,4 +96,26 @@ defmodule Nimiqex.Consensus do
       validity_start_height
     ],
     spec: [binary(), binary(), binary(), binary(), binary(), binary(), integer(), binary()]
+
+  rpc :create_reactivate_validator_transaction,
+    description: "create transaction to reactivate an inactive validator",
+    params: [
+      sender_wallet,
+      validator_wallet,
+      signing_secret_key,
+      fee,
+      validity_start_height
+    ],
+    spec: [binary(), binary(), binary(), integer(), binary()]
+
+  rpc :send_reactivate_validator_transaction,
+    description: "send transaction to reactivate an inactive validator",
+    params: [
+      sender_wallet,
+      validator_wallet,
+      signing_secret_key,
+      fee,
+      validity_start_height
+    ],
+    spec: [binary(), binary(), binary(), integer(), binary()]
 end
