@@ -1,8 +1,8 @@
-defmodule Nimiqex.Blockchain do
+defmodule Nimiqex.RPC.Blockchain do
   @moduledoc """
-  `Nimiqex.Blockchain` provides RPC requests regarding Albatross blockchain functionality
+  `Nimiqex.RPC.Blockchain` provides RPC requests regarding Albatross blockchain functionality
   """
-  import Nimiqex, only: [rpc: 2]
+  import Nimiqex.RPC, only: [rpc: 2]
 
   rpc :get_block_number,
     description: "retrieves latest block number"

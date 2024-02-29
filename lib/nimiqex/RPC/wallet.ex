@@ -1,8 +1,8 @@
-defmodule Nimiqex.Wallet do
+defmodule Nimiqex.RPC.Wallet do
   @moduledoc """
-  `Nimiqex.Wallet` provides RPC requests regarding Albatross wallet functionality
+  `Nimiqex.RPC.Wallet` provides RPC requests regarding Albatross wallet functionality
   """
-  import Nimiqex, only: [rpc: 2]
+  import Nimiqex.RPC, only: [rpc: 2]
 
   rpc :list_accounts,
     description: "list accounts present on the node"

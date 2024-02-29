@@ -1,8 +1,8 @@
-defmodule Nimiqex.Network do
+defmodule Nimiqex.RPC.Network do
   @moduledoc """
-  `Nimiqex.Network` provides RPC requests regarding Albatross network functionality
+  `Nimiqex.RPC.Network` provides RPC requests regarding Albatross network functionality
   """
-  import Nimiqex, only: [rpc: 2]
+  import Nimiqex.RPC, only: [rpc: 2]
 
   rpc :get_peer_id,
     description: "get peer id"

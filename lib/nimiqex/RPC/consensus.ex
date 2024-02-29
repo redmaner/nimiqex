@@ -1,8 +1,8 @@
-defmodule Nimiqex.Consensus do
+defmodule Nimiqex.RPC.Consensus do
   @moduledoc """
-  `Nimiqex.Consensus` provides RPC requests regarding Albatross consensus functionality
+  `Nimiqex.RPC.Consensus` provides RPC requests regarding Albatross consensus functionality
   """
-  import Nimiqex, only: [rpc: 2]
+  import Nimiqex.RPC, only: [rpc: 2]
 
   rpc :is_consensus_established,
     description: "returns the consensus status"

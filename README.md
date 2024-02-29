@@ -1,6 +1,6 @@
 # Nimiqex
 
-A native Elixir implementation of the Nimiq albatross RPC interface
+A native set of tools to interact and work with Nimiq albatross written in native Elixir.
 
 ## Installation
 

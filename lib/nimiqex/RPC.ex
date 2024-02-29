@@ -1,4 +1,4 @@
-defmodule Nimiqex do
+defmodule Nimiqex.RPC do
   require Logger
   use GenServer
 
