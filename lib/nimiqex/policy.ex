@@ -1,6 +1,4 @@
 defmodule Nimiqex.Policy do
-
-
   @doc """
   Returns the batch size as an integer
   """
@@ -22,14 +20,12 @@ defmodule Nimiqex.Policy do
     Application.get_env(:nimiqex, :policy_batches_in_epoch, 720)
   end
 
-
   @doc """
   Returns the genesis block number
   """
   def genesis_block_number() do
     Application.get_env(:nimiqex, :policy_genesis_block_number, 0)
   end
-
 
   @doc """
   Returns the batch number for the given block number
@@ -114,5 +110,4 @@ defmodule Nimiqex.Policy do
         false
     end
   end
-
 end
