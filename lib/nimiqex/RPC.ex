@@ -24,7 +24,7 @@ defmodule Nimiqex.RPC do
 
     %{
       id: name,
-      start: {Nimiqex, :start_link, [opts]}
+      start: {Nimiqex.RPC, :start_link, [opts]}
     }
   end
 
