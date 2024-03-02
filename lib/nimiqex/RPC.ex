@@ -4,7 +4,6 @@ defmodule Nimiqex.RPC do
 
   defp default_opts do
     [
-      name: :default,
       url: "http://seed1.nimiq.local:8648",
       use_auth: false,
       username: "",
@@ -17,25 +16,15 @@ defmodule Nimiqex.RPC do
     ]
   end
 
-  defp name(name), do: :"#{__MODULE__}.#{name}"
-
-  def child_spec(opts) do
-    name = default_opts() |> Keyword.merge(opts) |> Keyword.fetch!(:name)
-
-    %{
-      id: name,
-      start: {Nimiqex.RPC, :start_link, [opts]}
-    }
-  end
-
   def start_link(opts) do
-    name = default_opts() |> Keyword.merge(opts) |> Keyword.fetch!(:name)
-    GenServer.start_link(__MODULE__, opts, name: name(name))
+    {name, opts} = opts |> Keyword.pop(:name)
+    args = if name, do: [name: name], else: []
+    GenServer.start_link(__MODULE__, opts, args)
   end
 
   def init(opts) do
     with opts <- default_opts() |> Keyword.merge(opts),
-         {:ok, name} <- opts |> Keyword.fetch(:name),
+         name <- random_finch_name(),
          {:ok, url} <- opts |> Keyword.fetch(:url),
          {:ok, use_auth} <- opts |> Keyword.fetch(:use_auth),
          {:ok, username} <- opts |> Keyword.fetch(:username),
@@ -65,6 +54,14 @@ defmodule Nimiqex.RPC do
     end
   end
 
+  defp random_finch_name() do
+    random =
+      1..100_00
+      |> Enum.random()
+
+    :"#{Nimiqex.RPC}.Client.#{random}"
+  end
+
   defp new_http_pool(url, protocol, pool_size, pool_count) when is_binary(url) do
     %{
       :default => [
@@ -88,12 +85,12 @@ defmodule Nimiqex.RPC do
     |> Map.put(:default, size: pool_size, count: pool_count, protocol: :http1)
   end
 
-  def send(request, name \\ :default, url \\ :default) do
-    GenServer.call(name(name), {:send_rpc, &Jsonrpc.call/2, request, url}, 60_000)
+  def send(request, server \\ __MODULE__, url \\ :default) do
+    GenServer.call(server, {:send_rpc, &Jsonrpc.call/2, request, url}, 60_000)
   end
 
-  def send!(request, name \\ :default, url \\ :default) do
-    GenServer.call(name(name), {:send_rpc, &Jsonrpc.call!/2, request, url}, 60_000)
+  def send!(request, server \\ __MODULE__, url \\ :default) do
+    GenServer.call(server, {:send_rpc, &Jsonrpc.call!/2, request, url}, 60_000)
   end
 
   def handle_call(
