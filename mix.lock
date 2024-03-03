@@ -1,4 +1,5 @@
 %{
+  "blake2": {:hex, :blake2, "1.0.4", "8263c69a191142922bc2510f1ffc0de0ae96e8c3bd5e2ad3fac7e87aed94c8b1", [:mix], [], "hexpm", "e9f4120d163ba14d86304195e50745fa18483e6ad2be94c864ae449bbdd6a189"},
   "castore": {:hex, :castore, "0.1.15", "dbb300827d5a3ec48f396ca0b77ad47058578927e9ebe792abd99fcbc3324326", [:mix], [], "hexpm", "c69379b907673c7e6eb229f09a0a09b60bb27cfb9625bcb82ea4c04ba82a8442"},
   "earmark_parser": {:hex, :earmark_parser, "1.4.19", "de0d033d5ff9fc396a24eadc2fcf2afa3d120841eb3f1004d138cbf9273210e8", [:mix], [], "hexpm", "527ab6630b5c75c3a3960b75844c314ec305c76d9899bb30f71cb85952a9dc45"},
   "ex_doc": {:hex, :ex_doc, "0.25.5", "ac3c5425a80b4b7c4dfecdf51fa9c23a44877124dd8ca34ee45ff608b1c6deb9", [:mix], [{:earmark_parser, "~> 1.4.0", [hex: :earmark_parser, repo: "hexpm", optional: false]}, {:makeup_elixir, "~> 0.14", [hex: :makeup_elixir, repo: "hexpm", optional: false]}, {:makeup_erlang, "~> 0.1", [hex: :makeup_erlang, repo: "hexpm", optional: false]}], "hexpm", "688cfa538cdc146bc4291607764a7f1fcfa4cce8009ecd62de03b27197528350"},

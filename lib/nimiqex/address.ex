@@ -5,6 +5,41 @@ defmodule Nimiqex.Address do
   @nimiq_alphabet ~c{0123456789ABCDEFGHJKLMNPQRSTUVXY}
 
   @doc """
+  Allows to extract the address from the transaction `proof` field
+  This is the address that signed the transaction
+  """
+  def extract_address_from_transaction_proof(proof) do
+    proof_decoded = proof |> :binary.decode_hex()
+
+    proof_decoded
+    |> binary_part(0, 1)
+    |> extract_proof_address_by_type(proof_decoded)
+  end
+
+  defp extract_proof_address_by_type(_type_byte = <<0>>, proof_decoded) do
+    proof_decoded
+    |> extract_address_from_public_key(32)
+  end
+
+  defp extract_proof_address_by_type(_type_byte = <<1>>, proof_decoded) do
+    proof_decoded
+    |> extract_address_from_public_key(33)
+  end
+
+  defp extract_address_from_public_key(proof_decoded, pub_key_length) do
+    proof_decoded
+    |> binary_part(1, pub_key_length)
+    |> Blake2.hash2b(32)
+    |> case do
+      hash when is_binary(hash) ->
+        hash
+        |> binary_part(0, 20)
+        |> to_user_friendly_address()
+      :error -> {:error, :blake2b_hash_failed}
+    end
+  end
+
+  @doc """
   decode_recipient_data extracts the transaction type and beneficiary address from `recipientData` which is field
   present in transactions to the staking contract.
   """
