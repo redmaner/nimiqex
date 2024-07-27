@@ -35,7 +35,9 @@ defmodule Nimiqex.Address do
         hash
         |> binary_part(0, 20)
         |> to_user_friendly_address()
-      :error -> {:error, :blake2b_hash_failed}
+
+      :error ->
+        {:error, :blake2b_hash_failed}
     end
   end
 
