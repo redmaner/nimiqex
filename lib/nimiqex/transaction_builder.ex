@@ -176,6 +176,59 @@ defmodule Nimiqex.TransactionBuilder do
     |> hex_encode_transaction()
   end
 
+  def encode(
+        tx = %__MODULE__{
+          type: <<1>>,
+          signature: signature,
+          sender: sender,
+          sender_type: sender_type,
+          sender_data: sender_data,
+          recipient: recipient,
+          recipient_type: recipient_type,
+          recipient_data: recipient_data,
+          value: value,
+          fee: fee,
+          validity_start_height: validity_start_height,
+          network_id: network_id,
+          flags: flags
+        }
+      )
+      when byte_size(signature) > 0 do
+    {:ok, tx_proof} = create_proof(tx)
+
+    Nimiqex.Serializer.new()
+    # transaction type
+    |> Nimiqex.Serializer.serialize_bytes(<<1>>)
+    |> Nimiqex.Serializer.serialize_bytes(sender)
+    |> Nimiqex.Serializer.serialize_bytes(sender_type)
+    |> Nimiqex.Serializer.serialize_varint(byte_size(sender_data))
+    |> Nimiqex.Serializer.serialize_bytes(sender_data)
+    |> Nimiqex.Serializer.serialize_bytes(recipient)
+    |> Nimiqex.Serializer.serialize_bytes(recipient_type)
+    |> Nimiqex.Serializer.serialize_varint(byte_size(recipient_data))
+    |> Nimiqex.Serializer.serialize_bytes(recipient_data)
+    |> Nimiqex.Serializer.serialize_uint64_big_endian(value)
+    |> Nimiqex.Serializer.serialize_uint64_big_endian(fee)
+    |> Nimiqex.Serializer.serialize_uint32_big_endian(validity_start_height)
+    |> Nimiqex.Serializer.serialize_bytes(network_id)
+    |> Nimiqex.Serializer.serialize_bytes(flags)
+    |> Nimiqex.Serializer.serialize_varint(byte_size(tx_proof))
+    |> Nimiqex.Serializer.serialize_bytes(tx_proof)
+    |> Nimiqex.Serializer.unwrap()
+    |> hex_encode_transaction()
+  end
+
+  defp create_proof(%__MODULE__{signature: signature, public_key: public_key}) do
+    Nimiqex.Serializer.new()
+    # signature type
+    |> Nimiqex.Serializer.serialize_bytes(<<0>>)
+    |> Nimiqex.Serializer.serialize_bytes(public_key)
+    # merkle path
+    |> Nimiqex.Serializer.serialize_bytes(<<0>>)
+    |> Nimiqex.Serializer.serialize_bytes(signature)
+    |> Nimiqex.Serializer.unwrap()
+  end
+
   defp hex_encode_transaction(err = {:error, _reason}), do: err
   defp hex_encode_transaction({:ok, tx}), do: {:ok, :binary.encode_hex(tx, :lowercase)}
 end
