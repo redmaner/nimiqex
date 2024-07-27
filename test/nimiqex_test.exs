@@ -16,4 +16,9 @@ defmodule NimiqexTest do
     assert Nimiqex.Address.extract_address_from_transaction_proof(proof) ==
              "NQ65 DHN8 4BSR 5YSX FC3V BB5J GKM2 GB2L H17C"
   end
+
+  test "decode from friendely" do
+    cleaned = Nimiqex.Address.decode_from_friendly("NQ61 JFPK V52Y K77N 8FR6 L9CA 521J Y2CE T94N")
+    assert :binary.encode_hex(cleaned, :lowercase) == "93ef3e945f99cf643f26a258a28832f898eda496"
+  end
 end
