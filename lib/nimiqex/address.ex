@@ -84,8 +84,8 @@ defmodule Nimiqex.Address do
   end
 
   def decode_from_friendly(friendly) do
-    cleaned = String.replace(friendly, " ", "", [global: true])
-    cleaned = binary_part(cleaned, 4, String.length(cleaned)-4)
+    cleaned = String.replace(friendly, " ", "", global: true)
+    cleaned = binary_part(cleaned, 4, String.length(cleaned) - 4)
     Nimiqex.Base.decode32(cleaned, false)
   end
 

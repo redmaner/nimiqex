@@ -42,6 +42,9 @@ defmodule Nimiqex.TransactionBuilder do
     :public_key
   ]
 
+  def network_id_albatross_testnet(), do: <<5>>
+  def network_id_albatross_mainnet(), do: <<24>>
+
   @spec new_basic_transaction(
           bitstring(),
           bitstring(),
@@ -130,7 +133,7 @@ defmodule Nimiqex.TransactionBuilder do
          sender_data: sender_data
        }) do
     Nimiqex.Serializer.new()
-    |> Nimiqex.Serializer.serialize_uint16_big_endian(length(recipient_data))
+    |> Nimiqex.Serializer.serialize_uint16_big_endian(byte_size(recipient_data))
     |> Nimiqex.Serializer.serialize_bytes(recipient_data)
     |> Nimiqex.Serializer.serialize_address(sender)
     |> Nimiqex.Serializer.serialize_bytes(sender_type)
@@ -141,7 +144,7 @@ defmodule Nimiqex.TransactionBuilder do
     |> Nimiqex.Serializer.serialize_uint32_big_endian(validity_start_height)
     |> Nimiqex.Serializer.serialize_bytes(network_id)
     |> Nimiqex.Serializer.serialize_bytes(flags)
-    |> Nimiqex.Serializer.serialize_varint(length(sender_data))
+    |> Nimiqex.Serializer.serialize_varint(byte_size(sender_data))
     |> Nimiqex.Serializer.serialize_bytes(sender_data)
     |> Nimiqex.Serializer.unwrap()
   end
@@ -153,6 +156,7 @@ defmodule Nimiqex.TransactionBuilder do
         recipient: recipient,
         value: value,
         fee: fee,
+        validity_start_height: validity_start_height,
         network_id: network_id
       })
       when byte_size(signature) > 0 do
@@ -165,6 +169,7 @@ defmodule Nimiqex.TransactionBuilder do
     |> Nimiqex.Serializer.serialize_bytes(recipient)
     |> Nimiqex.Serializer.serialize_uint64_big_endian(value)
     |> Nimiqex.Serializer.serialize_uint64_big_endian(fee)
+    |> Nimiqex.Serializer.serialize_uint32_big_endian(validity_start_height)
     |> Nimiqex.Serializer.serialize_bytes(network_id)
     |> Nimiqex.Serializer.serialize_bytes(signature)
     |> Nimiqex.Serializer.unwrap()
@@ -172,5 +177,5 @@ defmodule Nimiqex.TransactionBuilder do
   end
 
   defp hex_encode_transaction(err = {:error, _reason}), do: err
-  defp hex_encode_transaction({:ok, tx}), do: {:ok, :binary.encode_hex(tx)}
+  defp hex_encode_transaction({:ok, tx}), do: {:ok, :binary.encode_hex(tx, :lowercase)}
 end
