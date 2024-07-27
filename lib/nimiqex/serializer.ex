@@ -41,7 +41,6 @@ defmodule Nimiqex.Serializer do
   @doc """
   Serialize bytes to the buffer
   """
-  @spec serialize_bytes(Nimiqex.Serializer.t(), binary()) :: Nimiqex.Serializer.t()
   def serialize_bytes(serializer = %__MODULE__{error: error}, _x)
       when not is_nil(error) do
     serializer
@@ -54,7 +53,8 @@ defmodule Nimiqex.Serializer do
   @doc """
   Serialize a number to the buffer in uint16 big endian format
   """
-  @spec serialize_uint16_big_endian(Nimiqex.Serializer.t(), integer()) :: Nimiqex.Serializer.t()
+  @spec serialize_uint16_big_endian(Nimiqex.Serializer.t(), non_neg_integer()) ::
+          Nimiqex.Serializer.t()
   def serialize_uint16_big_endian(serializer = %__MODULE__{error: error}, _x)
       when not is_nil(error) do
     serializer
@@ -68,7 +68,8 @@ defmodule Nimiqex.Serializer do
   @doc """
   Serialize a number to the buffer in uint32 big endian format
   """
-  @spec serialize_uint32_big_endian(Nimiqex.Serializer.t(), integer()) :: Nimiqex.Serializer.t()
+  @spec serialize_uint32_big_endian(Nimiqex.Serializer.t(), non_neg_integer()) ::
+          Nimiqex.Serializer.t()
   def serialize_uint32_big_endian(serializer = %__MODULE__{error: error}, _x)
       when not is_nil(error) do
     serializer
@@ -82,7 +83,8 @@ defmodule Nimiqex.Serializer do
   @doc """
   Serialize a number to the buffer in uint64 big endian format
   """
-  @spec serialize_uint64_big_endian(Nimiqex.Serializer.t(), integer()) :: Nimiqex.Serializer.t()
+  @spec serialize_uint64_big_endian(Nimiqex.Serializer.t(), non_neg_integer()) ::
+          Nimiqex.Serializer.t()
   def serialize_uint64_big_endian(serializer = %__MODULE__{error: error}, _x)
       when not is_nil(error) do
     serializer
@@ -96,7 +98,7 @@ defmodule Nimiqex.Serializer do
   @doc """
   Serialize a number to the buffer in varint format
   """
-  @spec serialize_varint(Nimiqex.Serializer.t(), integer()) :: Nimiqex.Serializer.t()
+  @spec serialize_varint(Nimiqex.Serializer.t(), non_neg_integer()) :: Nimiqex.Serializer.t()
   def serialize_varint(serializer = %__MODULE__{error: error}, _x)
       when not is_nil(error) do
     serializer

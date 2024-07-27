@@ -24,7 +24,8 @@ defmodule Nimiqex.MixProject do
       {:jsonrpc, "~> 0.2.0", hex: :finch_jsonrpc},
       {:inflex, "~> 2.1"},
       {:ex_doc, "~> 0.25.5", only: [:dev], runtime: false},
-      {:blake2, "~> 1.0"}
+      {:blake2, "~> 1.0"},
+      {:ed25519, "~> 1.4"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
