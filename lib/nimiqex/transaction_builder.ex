@@ -1,4 +1,6 @@
 defmodule Nimiqex.TransactionBuilder do
+  require Logger
+
   @tx_type_basic <<0>>
   @tx_type_extended <<1>>
 
@@ -8,6 +10,9 @@ defmodule Nimiqex.TransactionBuilder do
   @staking_contract_address <<0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                               0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01>>
 
+  @typedoc """
+  Used to construct a Nimiq transaction
+  """
   @type t :: %__MODULE__{
           type: bitstring(),
           sender: bitstring(),
@@ -42,9 +47,19 @@ defmodule Nimiqex.TransactionBuilder do
     :public_key
   ]
 
+  @doc """
+  Returns the albatross testnet network id
+  """
   def network_id_albatross_testnet(), do: <<5>>
+
+  @doc """
+  Returns the albatross mainnet network id
+  """
   def network_id_albatross_mainnet(), do: <<24>>
 
+  @doc """
+  Create a new basic transaction
+  """
   @spec new_basic_transaction(
           bitstring(),
           bitstring(),
@@ -80,6 +95,9 @@ defmodule Nimiqex.TransactionBuilder do
     }
   end
 
+  @doc """
+  Creates a new extended transaction with the add stake instruction
+  """
   def new_add_stake_transaction(
         sender,
         recipient,
@@ -112,6 +130,43 @@ defmodule Nimiqex.TransactionBuilder do
     }
   end
 
+  @doc """
+  Set fee to 1 luna per byte, using the amount of estimated bytes
+  based on the transaction information
+  """
+  def set_fee_by_byte_size(tx = %__MODULE__{type: <<0>>}) do
+    fee =
+      3 # type + signature type + network_id
+      |> Kernel.+(64) # signature
+      |> Kernel.+(32) # public key
+      |> Kernel.+(20) # recipient
+      |> Kernel.+(8) # big endian uint64 value
+      |> Kernel.+(8) # big endian uint64 fee
+      |> Kernel.+(4) # big endian uint32 validity start height
+
+      %__MODULE__{tx | fee: fee}
+  end
+
+  def set_fee_by_byte_size(tx = %__MODULE__{type: <<1>>, recipient_data: recipient_data, sender_data: sender_data}) do
+    fee =
+      3 # type + network_id + flags
+      |> Kernel.+(24) # sender address + type + len sender data
+      |> Kernel.+(byte_size(sender_data))
+      |> Kernel.+(24) # recipient address + type + len recipient data
+      |> Kernel.+(byte_size(recipient_data))
+      |> Kernel.+(98) # proof
+      |> Kernel.+(8) # big endian uint64 value
+      |> Kernel.+(8) # big endian uint64 fee
+      |> Kernel.+(4) # big endian uint32 validity start height
+
+      %__MODULE__{tx | fee: fee}
+  end
+
+  def set_fee_by_byte_size(_tx), do: {:error, :unknown_tx_type}
+
+  @doc """
+  Sign the transaction. Expects ED25519 keys.
+  """
   def sign(tx = %__MODULE__{}, priv_key, public_key) do
     with {:ok, signing_payload} <- create_signing_payload(tx) do
       signature = Ed25519.signature(signing_payload, priv_key, public_key)
@@ -149,6 +204,9 @@ defmodule Nimiqex.TransactionBuilder do
     |> Nimiqex.Serializer.unwrap()
   end
 
+  @doc """
+  Encode the transaction. Can be send with sendRawTransaction RPC call.
+  """
   def encode(%__MODULE__{
         type: <<0>>,
         signature: signature,
@@ -217,6 +275,8 @@ defmodule Nimiqex.TransactionBuilder do
     |> Nimiqex.Serializer.unwrap()
     |> hex_encode_transaction()
   end
+
+  def encode(_tx), do: {:error, :unknown_tx_type}
 
   defp create_proof(%__MODULE__{signature: signature, public_key: public_key}) do
     Nimiqex.Serializer.new()
