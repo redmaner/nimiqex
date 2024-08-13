@@ -7,7 +7,7 @@ A native set of tools to interact and work with Nimiq albatross written in nativ
 ```elixir
 def deps do
   [
-    {:nimiqex, git: "git@github.com:redmaner/nimiqex.git", tag: "0.8.0"}
+    {:nimiqex, git: "git@github.com:redmaner/nimiqex.git", tag: "0.9.1"}
   ]
 end
 ```

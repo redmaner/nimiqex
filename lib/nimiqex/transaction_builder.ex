@@ -167,6 +167,8 @@ defmodule Nimiqex.TransactionBuilder do
   @doc """
   Sign the transaction. Expects ED25519 keys.
   """
+  def sign(error = {:error, _reason}, _priv_key, _pubkey), do: error
+
   def sign(tx = %__MODULE__{}, priv_key, public_key) do
     with {:ok, signing_payload} <- create_signing_payload(tx) do
       signature = Ed25519.signature(signing_payload, priv_key, public_key)
@@ -207,6 +209,8 @@ defmodule Nimiqex.TransactionBuilder do
   @doc """
   Encode the transaction. Can be send with sendRawTransaction RPC call.
   """
+  def encode(error = {:error, _reason}), do: error
+
   def encode(%__MODULE__{
         type: <<0>>,
         signature: signature,
